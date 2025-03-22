@@ -21,17 +21,24 @@ To configure the project's toolchain, the file `rust-toolchain.toml` specifies u
    git clone https://github.com/0xTriboulet/iris-rs.git
    cd iris-rs
 ```
-1. **Install Rust and the specified toolchain**: Ensure you have the `stable-x86_64-pc-windows-gnu` toolchain installed. If not, install it via:
+2. **Install Rust and the specified toolchain**: Ensure you have the `stable-x86_64-pc-windows-gnu` toolchain installed. If not, install it via:
 ``` bash
    rustup install stable-x86_64-pc-windows-gnu
    rustup override set stable-x86_64-pc-windows-gnu
 ```
-1. **Install dependencies**: Run the following command to fetch and install the project's dependencies:
+3. **Install dependencies**: Run the following command to fetch and install the project's dependencies:
 ``` bash
    cargo build
 ```
-1. **Dataset**:
+4. **Dataset**:
     - Place the Iris dataset CSV (`iris.csv`) in your desired location.
+    - Pre-process dataset with method of your choosing to replace the categorical labels in the `species` column with the encoded labels described in `main.rs`.
+   ```rust
+    // Encoding values
+    Iris-setosa       0 
+    Iris-versicolor   1
+    Iris-virginica    2
+    ```
     - Update the `DATASET_PATH` constant in `main.rs` with the path to the CSV file.
 
 Example:
