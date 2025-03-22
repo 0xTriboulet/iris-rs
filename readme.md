@@ -18,7 +18,7 @@ To configure the project's toolchain, the file `rust-toolchain.toml` specifies u
 ## Installation & Setup
 1. **Clone the repository**:
 ``` bash
-   git clone https://github.com/<your-repo>/iris-rs.git
+   git clone https://github.com/0xTriboulet/iris-rs.git
    cd iris-rs
 ```
 1. **Install Rust and the specified toolchain**: Ensure you have the `stable-x86_64-pc-windows-gnu` toolchain installed. If not, install it via:
