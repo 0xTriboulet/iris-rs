@@ -1,0 +1,5 @@
+[toolchain]
+channel = "stable"
+target = "x86_64-pc-windows-gnu"
+components = []
+profile = "default"
