@@ -1,0 +1,16 @@
+[package]
+name = "iris-rs"
+version = "0.1.0"
+edition = "2024"
+
+[profile.release]
+strip = "symbols"
+panic = "abort"
+opt-level = "z"
+lto = true
+codegen-units = 1
+
+[dependencies]
+deltaml = { git = "https://github.com/blackportal-ai/delta", branch = "master",  features = ["classical_ml", "default"] }
+polars = { version = "0.46.0", features = ["polars-io"] }
+polars-core = { version = "0.46.0", features = ["default", "ndarray", "random"] }
