@@ -1,8 +1,7 @@
 use std::collections::HashMap;
+use std::env;
 use deltaml::{classical_ml::{Algorithm, algorithms::RandomForest, losses::CrossEntropy}, ndarray::{Array1, Array2}};
 use polars::prelude::*;
-
-static DATASET_PATH: &str = r"<dataset_path>\iris.csv";
 
 /* Encoding Map
 * Iris-setosa       0
@@ -12,6 +11,10 @@ static DATASET_PATH: &str = r"<dataset_path>\iris.csv";
 
 fn main() -> Result<(), PolarsError>{
 
+    // Get the current directory (relative to the Cargo.toml)
+    let manifest_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
+    let dataset_path = format!("{}\\..\\dataset\\iris-rs.csv", manifest_dir);
+
     let map_to_name: HashMap<u8, &str> = HashMap::from([
         (0, "Iris-setosa"),
         (1, "Iris-versicolor"),
@@ -20,21 +23,21 @@ fn main() -> Result<(), PolarsError>{
 
     let raw_dataset_df = CsvReadOptions::default()
         .with_has_header(true)
-        .try_into_reader_with_file_path(Some(DATASET_PATH.into()))?
+        .try_into_reader_with_file_path(Some(dataset_path.into()))?
         .finish()?;
 
     let sample_size = (raw_dataset_df.shape().0 as f64 * 0.8).trunc() as usize;
     let sample_dataset_df = raw_dataset_df.sample_n_literal(sample_size, false, true, Some(1337u64))?;
 
     let y_data = Array1::from_iter(sample_dataset_df
-                                       .column("species")?
+                                       .column("Species")?
                                        .to_owned()
                                        .into_frame()
                                        .to_ndarray::<Float64Type>(Default::default())?);
 
     // Drop "species" column to get features dataframe and convert to ndarray
     let x_data = sample_dataset_df
-        .drop("species")?
+        .drop("Species")?
         .to_ndarray::<Float64Type>(Default::default())?;
 
     // Init Model
@@ -46,7 +49,7 @@ fn main() -> Result<(), PolarsError>{
     model.fit(&x_data, &y_data, learning_rate, epochs);
 
     // Test point to new data array
-    let new_x_data = Array2::from_shape_vec((1, 4), vec![5.1, 3.5,1.4,0.2]).unwrap();
+    let new_x_data = Array2::from_shape_vec((1, 4), vec![5.1,3.4,1.4,0.2]).unwrap();
 
     // Make a prediction on the new data array
     let prediction = model.predict(&new_x_data);
