@@ -14,3 +14,4 @@ codegen-units = 1
 deltaml = { git = "https://github.com/blackportal-ai/delta", rev = "f572a61",  features = ["classical_ml", "default"] }
 polars = { version = "0.46.0", features = ["polars-io"] }
 polars-core = { version = "0.46.0", features = ["default", "ndarray", "random"] }
+openssl = { version = "0.10", features = ["vendored"] }

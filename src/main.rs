@@ -9,11 +9,22 @@ use polars::prelude::*;
 * Iris-virginica    2
 */
 
-fn main() -> Result<(), PolarsError>{
-
+fn get_dataset_path()-> String{
     // Get the current directory (relative to the Cargo.toml)
-    let manifest_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
-    let dataset_path = format!("{}\\..\\dataset\\iris-rs.csv", manifest_dir);
+    #[cfg(windows)]
+    {
+        let manifest_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
+        let dataset_path = format!("{}\\..\\dataset\\iris-rs.csv", manifest_dir);
+        dataset_path
+    }
+    #[cfg(not(windows))]
+    {
+        let dataset_path = "iris-rs.csv".to_string();
+        dataset_path
+    }
+}
+
+fn main() -> Result<(), PolarsError>{
 
     let map_to_name: HashMap<u8, &str> = HashMap::from([
         (0, "Iris-setosa"),
@@ -23,7 +34,7 @@ fn main() -> Result<(), PolarsError>{
 
     let raw_dataset_df = CsvReadOptions::default()
         .with_has_header(true)
-        .try_into_reader_with_file_path(Some(dataset_path.into()))?
+        .try_into_reader_with_file_path(Some(get_dataset_path().into()))?
         .finish()?;
 
     let sample_size = (raw_dataset_df.shape().0 as f64 * 0.8).trunc() as usize;
